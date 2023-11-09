@@ -1,0 +1,13 @@
+sim_pattern_lpp <- function(X1,X2,alpha,beta1,beta2,segment_lengths,linnet_object){
+  int_process=exp(alpha + beta1*X1 + beta2*X2)
+  counts=rpois(length(segment_lengths),lambda = int_process*segment_lengths)
+  pattern=c()
+  for (i in 1:length(segment_lengths)){
+    if (counts[i]>0){
+      unif_values=runif(counts[i],0,1)
+      pattern=rbind(pattern,cbind((1-unif_values)*linnet_object$lines$ends$x0[i]+unif_values*linnet_object$lines$ends$x1[i],
+                                  (1-unif_values)*linnet_object$lines$ends$y0[i]+unif_values*linnet_object$lines$ends$y1[i]))
+    }
+  }
+  return(pattern)
+}
