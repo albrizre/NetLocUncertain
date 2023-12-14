@@ -1,11 +1,8 @@
 library(nimble)
-library(sp)
-library(rgdal)
-library(rgeos)
-library(sf)
-library(spdep)
-library(maptools)
 library(spatstat)
+library(spdep)
+library(sp)
+library(sf)
 
 # Set the working directory...
 # setwd("")
@@ -28,7 +25,8 @@ for (error in c(0,5,10,20)){
       
       # Model construction and call
       
-      segment_lengths=SpatialLinesLengths(as.SpatialLines.psp(as.psp(grafo_intersecciones)))
+      lines=st_as_sf(as.psp(grafo_intersecciones))
+      segment_lengths=st_length(lines)[-1] # remove window length
       constants <- list(
         
         N = length(X1)+nrow(distances),

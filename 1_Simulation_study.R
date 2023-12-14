@@ -1,9 +1,7 @@
 library(spatstat)
-library(spatstat.linnet)
-library(spatstat.geom)
-library(rgeos)
 library(spdep)
-library(maptools)
+library(sp)
+library(sf)
 
 # Set the working directory...
 # setwd("")
@@ -11,11 +9,8 @@ library(maptools)
 source("Functions/sim_pattern_lpp.R")
 
 load("Data/grafo_intersecciones.rda")
-lines=as.SpatialLines.psp(as.psp(grafo_intersecciones))
-segment_lengths=SpatialLinesLengths(lines)
-proj4string(lines)="+proj=utm +zone=30 +ellps=WGS84 +units=m +no_defs"
-lines=SpatialLinesDataFrame(lines,data.frame(Line=1:length(lines)),match.ID = F)
-proj4string(lines)="+proj=utm +zone=30 +ellps=WGS84 +units=m +no_defs"
+lines=st_as_sf(as.psp(grafo_intersecciones))
+segment_lengths=st_length(lines)[-1] # remove window length
 
 # Simulate data
 
@@ -64,7 +59,10 @@ for (error in c(0,5,10,20)){
     
     # Compute distances between events and segments
     
-    dist_events_segments=gDistance(lines,points,byid = T)
+    points_sf=as(points,"sf")
+    st_crs(lines)=st_crs(points_sf)
+    dist_events_segments=matrix(st_distance(points_sf, lines),nrow=length(points_sf$geometry))[,-1] # remove window distances
+    colnames(dist_events_segments)=1:ncol(dist_events_segments)
     
     # For each event, compute the 4 minimum distances and the segments corresponding to these distances
     
