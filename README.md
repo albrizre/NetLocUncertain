@@ -1,4 +1,4 @@
-R code for the paper *Dealing with location uncertainty for modeling network-constrained lattice data*, by Álvaro Briz-Redón.
+R code for the paper *Dealing with location uncertainty for modeling network-constrained lattice data*, by Álvaro Briz-Redón, published in *Spatial Statistics* https://www.sciencedirect.com/science/article/pii/S2211675323000829.
 
 - File "1_Simulation_study.R" allows generating the simulated data under the data-generating process described in Section 4 of the paper.
 - File "2_Model_nearest_sim_gamma.R" allows fitting the nearest segment model described in the paper.
